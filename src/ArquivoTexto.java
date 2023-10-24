@@ -1,4 +1,4 @@
-/**
+package src; /**
  * Classe responsável pela leitura do arquivo texto.
  * @author Isabel H. Manssour
  */

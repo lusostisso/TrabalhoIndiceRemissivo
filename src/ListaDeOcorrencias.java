@@ -1,3 +1,5 @@
+package src;
+
 /**
  * Esta classe guarda os numeros das paginas em que uma palavra ocorre.
  * @author Isabel H. Manssour
@@ -103,21 +105,23 @@ public class ListaDeOcorrencias {
             aux= aux.next;
         }
         return false;
-    }    
-    
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
 
         Node aux = head;
 
-        do {
+        while (aux != null) {
             s.append(aux.numeroDaPagina);
-            s.append(",");
             aux = aux.next;
-        }while (aux != null);
-
+            if (aux != null) {
+                s.append(",");
+            }
+        }
 
         return s.toString();
     }
+
 }

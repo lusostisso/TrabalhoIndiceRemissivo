@@ -1,3 +1,4 @@
+package src;
 
 public class LinkedListOfString {
     // Classe interna Node
