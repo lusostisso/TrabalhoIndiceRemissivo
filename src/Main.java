@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         ArquivoTexto arquivo = new ArquivoTexto();
         int nLinha = 0;
-        int nPagina = 0;
+        int nPagina = 1;
         int qtdPalavras = 0;
         int qtdStopwords = 0;
         double porcentagemStopwords = 0;
@@ -47,7 +47,7 @@ public class Main {
                 if (palavra != null) {
                     palavra = palavra.toLowerCase();
                     palavra = removerPontuacao(palavra);
-                    if (!isStopWord(palavra)) {
+                    if (!isStopWord(palavra) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
                         if (listaOrdenadaDePalavras.contains(palavra)) {
                             if (!listaOrdenadaDePalavras.getOcorrencia(palavra, nPagina)) {
                                 listaOrdenadaDePalavras.addPagina(palavra, nPagina);
@@ -61,8 +61,10 @@ public class Main {
                         qtdPalavras++;
                     }
                     else{
-                        qtdStopwords++;
-                        qtdPalavras++;
+                        if(isStopWord(palavra)){
+                            qtdStopwords++;
+                            qtdPalavras++;
+                        }
                     }
                 } else {
                     break; //acabou a linha
@@ -95,6 +97,9 @@ public class Main {
                     System.out.printf("%.4f%%\n",porcentagemStopwords);
                     break;
                 case 3: 
+                    String maisOcorrencias;
+                    maisOcorrencias = listaOrdenadaDePalavras.maisOcorre();
+                    System.out.println(maisOcorrencias);
                     System.out.println("opcao 3");
 
                     break;            
@@ -134,7 +139,9 @@ public class Main {
         for(int i=0;i<str.length();i++){
             if(str.charAt(i)!= '.' && str.charAt(i)!= '!' &&
                str.charAt(i)!= ',' && str.charAt(i)!= '?' &&
-               str.charAt(i)!= '*' ){
+               str.charAt(i)!= '*' && str.charAt(i)!= ')' &&
+               str.charAt(i)!= '(' && str.charAt(i)!= '\'' &&
+               str.charAt(i)!= '-' && str.charAt(i)!= '"'){
                 palavra.append(str.charAt(i));
                }
         }
@@ -146,9 +153,11 @@ public class Main {
         System.out.println("1 - EXIBIR INDICE REMISSIVO");
         System.out.println("2 - EXIBIR PERCENTUAL DE STOPWORDS");
         System.out.println("3 - EXIBIR PALAVRA MAIS FREQUENTE");
-        System.out.println("4 - DIGITE UMA PALAVRA PARA VERIFICAR EM QUAIS PÁGINAS ELA ESTÁ");
+        System.out.println("4 - PROCURAR UMA PALAVRA");
         System.out.println("5 - ENCERRAR O PROGRAMA");
     }
+
+    
 }
     
 

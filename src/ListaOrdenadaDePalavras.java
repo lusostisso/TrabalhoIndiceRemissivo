@@ -154,6 +154,19 @@ public class ListaOrdenadaDePalavras {
 
         return s.toString();
     }
+
+    public String maisOcorre(){
+        Palavra maisOcorre,aux2;
+        maisOcorre = this.primeira;
+        aux2 = this.primeira.next;
+        for(int i=0;i<this.count-1;i++){
+            if(aux2.listaOcorrencias.size() > maisOcorre.listaOcorrencias.size()){
+                maisOcorre=aux2;
+            }
+            aux2=aux2.next;
+        }
+        return maisOcorre.s;
+    }
     
     
 
