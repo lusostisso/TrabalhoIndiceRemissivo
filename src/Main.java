@@ -75,10 +75,6 @@ public class Main {
 
             arquivo.close();
             porcentagemStopwords = ((double)qtdStopwords / (double)qtdPalavras) * 100;
-            System.out.println(listaOrdenadaDePalavras);
-            System.out.println(qtdStopwords);
-            System.out.println(qtdPalavras);
-            
 
         boolean encerrarPrograma = false;
         int opcao;
