@@ -1,6 +1,8 @@
 package src;
 import java.util.Scanner;
 
+import javax.print.DocFlavor.STRING;
+
 /**
  * Classe que inicializa a execução da aplicacao.
  * @author Isabel H. Manssour
@@ -21,7 +23,8 @@ public class Main {
         Scanner in = new Scanner(System.in);
         System.out.println("POR FAVOR, DIGITE O NOME DO ARQUIVO A SER ACESSADO:");
         /* cocoaandchocolate.txt */
-        String acessaString = in.nextLine();
+        // String acessaString = in.nextLine();
+        String acessaString = "cocoaandchocolate.txt";
         System.out.println("PROCESSANDO...");
 
         arquivo.open(acessaString);
@@ -38,7 +41,6 @@ public class Main {
                 nPagina++;
                 //System.out.println("Pagina " + nPagina + ":");
             }
-            
             // System.out.println("Linha " + nLinha + ":");
 
             linha.setLine(l); // define o texto da linha
@@ -101,10 +103,16 @@ public class Main {
 
                     break;            
                 case 4: 
-                    System.out.println("opcao 4");    
+                    System.out.println("opcao 4"); 
+                    System.out.println("DIGITE A PALAVRA PARA VER QUAIS PAGINAS ELA ESTA:");
+                    String pala;
+                    in.nextLine();// limpando o buffer
+                    pala = in.nextLine();
+                    System.out.println("LISTA DAS PAGINAS: \n"+listaOrdenadaDePalavras.encontrarPalavra(pala));
                     break;
                 case 5: 
                     encerrarPrograma = true;
+                    System.out.println("...ENCERRANDO O PROGRAMA...");
                     break;
                 default:
                     System.out.println("OPCAO INVALIDA");

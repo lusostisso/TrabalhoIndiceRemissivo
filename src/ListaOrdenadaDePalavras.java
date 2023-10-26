@@ -1,4 +1,5 @@
 package src;
+import java.util.List;
 
 /**
  * Esta classe guarda as palavra do indice remissivo em ordem alfabetica.
@@ -168,7 +169,24 @@ public class ListaOrdenadaDePalavras {
         return maisOcorre.s;
     }
     
-    
+    public ListaDeOcorrencias encontrarPalavra(String pala){
+        Palavra aux;
+        aux = this.primeira;
+        ListaDeOcorrencias paginas = new ListaDeOcorrencias();
+        for(int i = 0; i<count;i++){
+            if(aux.s.equals(pala)){
+                paginas = aux.listaOcorrencias;
+                break;
+            }
+            else{
+                aux = aux.next;
+            }
+        }
+        if(paginas!= null){
+            return paginas;
+        }
+        return null;
+    }
 
 
 }
