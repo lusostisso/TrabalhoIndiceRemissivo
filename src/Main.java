@@ -22,7 +22,7 @@ public class Main {
         System.out.println("POR FAVOR, DIGITE O NOME DO ARQUIVO A SER ACESSADO:");
         /* cocoaandchocolate.txt */
         String acessaString = in.nextLine();
-        
+        System.out.println("PROCESSANDO");
 
         arquivo.open(acessaString);
 
