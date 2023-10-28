@@ -31,8 +31,6 @@ public class ListaOrdenadaDePalavras {
     private Palavra primeira;
     private Palavra ultima;
     private Integer count;
-    LinkedListOfString linkedListOfString = new LinkedListOfString();
-
 
 
     // Metodos
@@ -43,67 +41,38 @@ public class ListaOrdenadaDePalavras {
         this.count = 0;
     }
 
-    public void addPalavra (String palavra){
-
+    public void addPalavra(String palavra) {
         Palavra novo = new Palavra(palavra);
-        if (primeira == null){
+        if (primeira == null) {
             primeira = novo;
+            ultima = novo;
         } else {
-
-            ultima.next = novo;
-        }
-        ultima = novo;
-        count++;
-    }
-/*
-    public void addPalavra (String palavra) {
-
-        Palavra aux = containsElement(palavra); // verifica se ja contem element para não inserir duplicado
-        if (aux == null) {  // se nao contem element, insere
-            Palavra n = new Palavra(palavra);
-
-            if (primeira.next == ultima) {
-                // se a lista está vazia
-                n.prev = primeira;
-                n.next = ultima;
-                ultima.prev = n;
-                primeira.next = n;
-
-            }
-            else if (palavra.compareTo(primeira.next.s)<0) {
-                // se for menor que o primeiro, insere no inicio
-                n.next = primeira.next;
-                n.prev = primeira;
-                primeira.next = n;
-                n.next.prev = n;
-            }
-            else if (palavra.compareTo(ultima.prev.s)>0) {
-                // se for maior que o ultimo, insere no final
-                n.next = ultima;
-                n.prev = ultima.prev;
-                ultima.prev.next = n;
-                ultima.prev = n;
-            }
-            else {
-                // senao procura a posicao correta para insercao
-                aux = primeira.next;
-                boolean inseriu=false;
-                while (aux!=ultima && !inseriu) {
-                    if (palavra.compareTo(aux.s)<0) {
+            if (primeira.s.compareTo(palavra) > 0) {
+                novo.next = primeira;
+                primeira = novo;
+            } else if (ultima.s.compareTo(palavra) < 0) {
+                ultima.next = novo;
+                ultima = novo;
+            } else {
+                Palavra aux = primeira;
+                boolean inseriu = false;
+                while (aux.next != null  && !inseriu) {
+                    if (palavra.compareTo(aux.next.s) < 0) {
                         inseriu = true;
-                        n.next = aux;
-                        n.prev=aux.prev;
-                        aux.prev.next = n;
-                        aux.prev = n;
+                        novo.next = aux.next;
+                        aux.next = novo;
+
                     }
                     aux = aux.next;
                 }
+                if (!inseriu) {
+                    ultima.next = novo;
+                    ultima = novo;
+                }
             }
-            count++;
         }
+        count++;
     }
-
-*/
 
     public Palavra getPalavra (String palavra) {
         Palavra aux = primeira;

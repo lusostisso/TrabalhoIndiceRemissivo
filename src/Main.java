@@ -22,9 +22,8 @@ public class Main {
         String l;
         Scanner in = new Scanner(System.in);
         System.out.println("POR FAVOR, DIGITE O NOME DO ARQUIVO A SER ACESSADO:");
-        /* cocoaandchocolate.txt */
-        // String acessaString = in.nextLine();
-        String acessaString = "cocoaandchocolate.txt";
+        String acessaString = in.nextLine();
+
         System.out.println("PROCESSANDO...");
 
         arquivo.open(acessaString);
@@ -39,9 +38,7 @@ public class Main {
             {
                 nLinha = 0;
                 nPagina++;
-                //System.out.println("Pagina " + nPagina + ":");
             }
-            // System.out.println("Linha " + nLinha + ":");
 
             linha.setLine(l); // define o texto da linha
             do // laco que passa em cada palavra de uma linha
@@ -50,17 +47,15 @@ public class Main {
                 if (palavra != null) {
                     palavra = palavra.toLowerCase();
                     palavra = removerPontuacao(palavra);
-                    if (!isStopWord(palavra) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
+                    if ((!(isStopWord(palavra))) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
                         if (listaOrdenadaDePalavras.contains(palavra)) {
                             if (!listaOrdenadaDePalavras.getOcorrencia(palavra, nPagina)) {
                                 listaOrdenadaDePalavras.addPagina(palavra, nPagina);
                             }
-
                         } else {
                             listaOrdenadaDePalavras.addPalavra(palavra);
                             listaOrdenadaDePalavras.addPagina(palavra, nPagina);
                         }
-                        // System.out.println("-" + palavra + "-");
                         qtdPalavras++;
                     }
                     else{
@@ -93,7 +88,7 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("opcao 2");
-                    System.out.printf("%.4f%%\n",porcentagemStopwords);
+                    System.out.printf("%.2f%%\n",porcentagemStopwords);
                     break;
                 case 3: 
                     String maisOcorrencias;
@@ -142,14 +137,15 @@ public class Main {
     public static String removerPontuacao(String str){
         StringBuilder palavra = new StringBuilder();
         for(int i=0;i<str.length();i++){
-            if(str.charAt(i)!= '.' && str.charAt(i)!= '!' &&
-               str.charAt(i)!= ',' && str.charAt(i)!= '?' &&
-               str.charAt(i)!= '*' && str.charAt(i)!= ')' &&
-               str.charAt(i)!= '(' && str.charAt(i)!= '\'' &&
-               str.charAt(i)!= '-' && str.charAt(i)!= '"' &&
-               str.charAt(i)!= '_' && str.charAt(i)!= ':' &&
-               str.charAt(i)!= ';' && str.charAt(i)!= '&' ){
-                palavra.append(str.charAt(i));
+            char aux = str.charAt(i);
+            if(aux!= '.' && aux!= '!' &&
+               aux!= ',' && aux!= '?' &&
+               aux!= '*' && aux!= ')' &&
+               aux!= '(' && aux!= '"' &&
+               aux!= '-' && aux!= '"' &&
+               aux!= '_' && aux!= ':' &&
+               aux!= ';' && aux!= '&'){
+                palavra.append(aux);
                }
         }
         return palavra.toString();
