@@ -11,14 +11,17 @@ public class ListaOrdenadaDePalavras {
     private class Palavra {
         public String s;
         public ListaDeOcorrencias listaOcorrencias;
-        public Palavra next;    
+        public Palavra next; 
+        public int ocorrencias = 0;   
         public Palavra(String str) {
             s = str;
             next = null;
             listaOcorrencias = new ListaDeOcorrencias();
         }
         // Metodos
-
+        public void incrOcorrencias(){
+            this.ocorrencias+=1;
+        }
 
         @Override
         public String toString() {
@@ -99,6 +102,7 @@ public class ListaOrdenadaDePalavras {
     public void addPagina (String palavra, int pg){
         Palavra aux = getPalavra(palavra);
         aux.listaOcorrencias.add(pg);
+        // aux.incrOcorrencias(); nao funcionou, acho
     }
 
     public boolean getOcorrencia (String palavra, int pg){
@@ -130,7 +134,7 @@ public class ListaOrdenadaDePalavras {
         maisOcorre = this.primeira;
         aux2 = this.primeira.next;
         for(int i=0;i<this.count-1;i++){
-            if(aux2.listaOcorrencias.size() > maisOcorre.listaOcorrencias.size()){
+            if(aux2.ocorrencias > maisOcorre.ocorrencias){
                 maisOcorre=aux2;
             }
             aux2=aux2.next;
@@ -156,6 +160,4 @@ public class ListaOrdenadaDePalavras {
         }
         return null;
     }
-
-
 }
