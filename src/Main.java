@@ -103,7 +103,14 @@ public class Main {
                     String pala;
                     in.nextLine();// limpando o buffer
                     pala = in.nextLine();
-                    System.out.println("LISTA DAS PAGINAS: \n"+listaOrdenadaDePalavras.encontrarPalavra(pala));
+                    ListaDeOcorrencias lista = listaOrdenadaDePalavras.encontrarPalavra(pala);
+                    if(lista.size()!=0){
+                        System.out.println("LISTA DAS PAGINAS:");
+                        System.out.println(listaOrdenadaDePalavras.encontrarPalavra(pala));
+                    }
+                    else{
+                        System.out.println("PALAVRA NAO ENCONTRADA NO TEXTO.");
+                    }    
                     break;
                 case 5: 
                     encerrarPrograma = true;
@@ -145,8 +152,12 @@ public class Main {
                aux!= '-' && aux!= '"' &&
                aux!= '_' && aux!= ':' &&
                aux!= ';' && aux!= '&'){
-                palavra.append(aux);
-               }
+                if((i==0 || i == str.length()-1)&& aux== '\''){
+                }
+                else{
+                    palavra.append(aux);
+                }
+            }
         }
         return palavra.toString();
     }
