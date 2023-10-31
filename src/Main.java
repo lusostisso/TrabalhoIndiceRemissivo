@@ -83,22 +83,17 @@ public class Main {
             opcao = in.nextInt();
             switch(opcao){
                 case 1: 
-                    System.out.println("opcao 1");
                     System.out.println(listaOrdenadaDePalavras);
                     break;
                 case 2:
-                    System.out.println("opcao 2");
                     System.out.printf("%.2f%%\n",porcentagemStopwords);
                     break;
                 case 3: 
                     String maisOcorrencias;
                     maisOcorrencias = listaOrdenadaDePalavras.maisOcorre();
                     System.out.println(maisOcorrencias);
-                    System.out.println("opcao 3");
-
                     break;            
-                case 4: 
-                    System.out.println("opcao 4"); 
+                case 4:  
                     System.out.println("DIGITE A PALAVRA PARA VER QUAIS PAGINAS ELA ESTA:");
                     String pala;
                     in.nextLine();// limpando o buffer
