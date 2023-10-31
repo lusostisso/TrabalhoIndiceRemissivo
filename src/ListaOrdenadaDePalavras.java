@@ -19,8 +19,8 @@ public class ListaOrdenadaDePalavras {
             listaOcorrencias = new ListaDeOcorrencias();
         }
         // Metodos
-        public void incrOcorrencias(){
-            this.ocorrencias+=1;
+        public void incrOcorrencias(Palavra str){
+            str.ocorrencias++;
         }
 
         @Override
@@ -102,7 +102,6 @@ public class ListaOrdenadaDePalavras {
     public void addPagina (String palavra, int pg){
         Palavra aux = getPalavra(palavra);
         aux.listaOcorrencias.add(pg);
-        // aux.incrOcorrencias(); nao funcionou, acho
     }
 
     public boolean getOcorrencia (String palavra, int pg){
