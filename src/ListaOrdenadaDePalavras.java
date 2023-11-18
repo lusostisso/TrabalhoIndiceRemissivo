@@ -10,14 +10,15 @@ public class ListaOrdenadaDePalavras {
     private class Palavra {
         public String s;
         public ListaDeOcorrencias listaOcorrencias;
-        public Palavra next;    
+        public Palavra next; 
+        public int ocorrencias;
         public Palavra(String str) {
             s = str;
             next = null;
             listaOcorrencias = new ListaDeOcorrencias();
+            ocorrencias = 0;
         }
         // Metodos
-
 
         @Override
         public String toString() {
@@ -30,8 +31,6 @@ public class ListaOrdenadaDePalavras {
     private Palavra primeira;
     private Palavra ultima;
     private Integer count;
-    LinkedListOfString linkedListOfString = new LinkedListOfString();
-
 
 
     // Metodos
@@ -42,89 +41,94 @@ public class ListaOrdenadaDePalavras {
         this.count = 0;
     }
 
-    public void addPalavra (String palavra){
-
-        Palavra novo = new Palavra(palavra);
-        if (primeira == null){
-            primeira = novo;
-        } else {
-
-            ultima.next = novo;
-        }
-        ultima = novo;
-        count++;
+    public void incrOcorrencias(String str){
+        Palavra aux = getPalavra(str);
+        aux.ocorrencias++;
     }
-/*
-    public void addPalavra (String palavra) {
 
-        Palavra aux = containsElement(palavra); // verifica se ja contem element para não inserir duplicado
-        if (aux == null) {  // se nao contem element, insere
-            Palavra n = new Palavra(palavra);
-
-            if (primeira.next == ultima) {
-                // se a lista está vazia
-                n.prev = primeira;
-                n.next = ultima;
-                ultima.prev = n;
-                primeira.next = n;
-
-            }
-            else if (palavra.compareTo(primeira.next.s)<0) {
-                // se for menor que o primeiro, insere no inicio
-                n.next = primeira.next;
-                n.prev = primeira;
-                primeira.next = n;
-                n.next.prev = n;
-            }
-            else if (palavra.compareTo(ultima.prev.s)>0) {
-                // se for maior que o ultimo, insere no final
-                n.next = ultima;
-                n.prev = ultima.prev;
-                ultima.prev.next = n;
-                ultima.prev = n;
-            }
-            else {
-                // senao procura a posicao correta para insercao
-                aux = primeira.next;
-                boolean inseriu=false;
-                while (aux!=ultima && !inseriu) {
-                    if (palavra.compareTo(aux.s)<0) {
+    public void addPalavra(String palavra) {
+        Palavra novo = new Palavra(palavra);
+        if (primeira == null) {
+            primeira = novo;
+            ultima = novo;
+        } else {
+            if (primeira.s.compareTo(palavra) > 0) {
+                novo.next = primeira;
+                primeira = novo;
+            } else if (ultima.s.compareTo(palavra) < 0) {
+                ultima.next = novo;
+                ultima = novo;
+            } else {
+                Palavra aux = primeira;
+                boolean inseriu = false;
+                while (aux.next != null  && !inseriu) {
+                    if (palavra.compareTo(aux.next.s) < 0) {
                         inseriu = true;
-                        n.next = aux;
-                        n.prev=aux.prev;
-                        aux.prev.next = n;
-                        aux.prev = n;
+                        novo.next = aux.next;
+                        aux.next = novo;
+
                     }
                     aux = aux.next;
                 }
+                if (!inseriu) {
+                    ultima.next = novo;
+                    ultima = novo;
+                }
             }
-            count++;
         }
+        count++;
     }
 
-*/
-
-    public Palavra getPalavra (String palavra) {
+    public Palavra getPalavra(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
         Palavra aux = primeira;
-        for (int i=0; i<count; i++){
-            if (palavra.equals(aux.s)){
-                return aux;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
             }
-            aux = aux.next;
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return aux;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+                aux = primeira; // Reinicia o aux para a primeira palavra
+            } else {
+                esquerda = mid + 1;
+                aux = primeira; // Reinicia o aux para a primeira palavra
+            }
         }
+
         return null;
     }
 
-    public boolean contains (String palavra){
-        Palavra aux = primeira;
-        for (int i=0; i<count; i++){
-            if (palavra.equals(aux.s)){
-                return true;
+
+    public boolean contains(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            Palavra aux = primeira;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
             }
-            aux = aux.next;
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return true;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+            } else {
+                esquerda = mid + 1;
+            }
         }
         return false;
     }
+
 
     public void addPagina (String palavra, int pg){
         Palavra aux = getPalavra(palavra);
@@ -146,7 +150,7 @@ public class ListaOrdenadaDePalavras {
         while (aux != null) {
             s.append("palavra = ");
             s.append(aux.s);
-            s.append(", ocorrencias = ");
+            s.append(", num pag = ");
             s.append(aux.listaOcorrencias);
             s.append("\n");
             aux = aux.next;
@@ -155,6 +159,60 @@ public class ListaOrdenadaDePalavras {
         return s.toString();
     }
 
+    public String maisOcorre(){
+        Palavra maisOcorre, aux2;
+        maisOcorre = this.primeira;
+        aux2 = this.primeira.next;
+        for(int i=0;i<this.count-1;i++){
+            if(aux2.ocorrencias > maisOcorre.ocorrencias){
+                maisOcorre = aux2;
+            }
+            aux2 = aux2.next;
+        }
+        return maisOcorre.s;
+    }
 
 
+    public ListaDeOcorrencias encontrarPalavra(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            Palavra aux = primeira;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
+            }
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return aux.listaOcorrencias;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+            } else {
+                esquerda = mid + 1;
+            }
+        }
+        return null;
+
+    }
+/*
+    public ListaDeOcorrencias encontrarPalavra(String pala){
+        Palavra aux;
+        aux = this.primeira;
+        ListaDeOcorrencias paginas = new ListaDeOcorrencias();
+        for(int i = 0; i<count;i++){
+            if(aux.s.equals(pala)){
+                paginas = aux.listaOcorrencias;
+                break;
+            }
+            else{
+                aux = aux.next;
+            }
+        }
+        if(paginas!= null){
+            return paginas;
+        }
+        return null;
+    }*/
 }

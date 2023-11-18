@@ -5,7 +5,7 @@ package src;
  */
 public class LinhaTexto {
     private String linha;
-    private String palavras[];
+    private String [] palavras;
     private int contPalavras;
     
     /**
@@ -18,8 +18,31 @@ public class LinhaTexto {
         linha = linha.replaceAll(",",""); // para remover vírgulas
         linha = linha.replaceAll("\\.",""); // para remover ponto final
         linha = linha.replaceAll("\\?",""); // para remover ponto interrogacao
-        linha = linha.replaceAll("\\!",""); // para remover ponto exclamacao
-        palavras = linha.split(" "); // divide a string pelo espaco em branco 
+        linha = linha.replaceAll("!",""); // para remover ponto exclamacao
+        linha = linha.replaceAll("\\.", "");
+        linha = linha.replaceAll("\\*", "");
+        linha = linha.replaceAll("\\(", "");
+        linha = linha.replaceAll("\\)", "");
+        linha = linha.replaceAll("\\{", "");
+        linha = linha.replaceAll("}", "");
+        linha = linha.replaceAll("]", "");
+        linha = linha.replaceAll("\\[", "");
+        linha = linha.replaceAll("\"", "");
+        linha = linha.replaceAll("_", "");
+        linha = linha.replaceAll(":", "");
+        linha = linha.replaceAll(";", "");
+        linha = linha.replaceAll("'t", "");
+        linha = linha.replaceAll("'d", "");
+        linha = linha.replaceAll("'ll", "");
+        linha = linha.replaceAll("'re", "");
+        linha = linha.replaceAll("won't", "");
+        linha = linha.replaceAll("'", "");
+        linha = linha.replaceAll("\\d", "");
+        linha = linha.replaceAll("'", "");
+        linha = linha.replaceAll("&", " ");
+        linha = linha.replaceAll("--", " ");
+
+        palavras = linha.split(" "); // divide a string pelo espaco em branco
         contPalavras = 0;
     }
     

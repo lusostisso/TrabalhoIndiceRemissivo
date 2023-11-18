@@ -1,8 +1,12 @@
 package src;
+import java.util.Scanner;
 
 /**
  * Classe que inicializa a execução da aplicacao.
- * @author Isabel H. Manssour
+ * @author Luana R. Sostisso
+ * @author Pedro T. Barcelos
+ * @coauthor Isabel H. Manssour
+ *
  */
 public class Main {
 
@@ -10,11 +14,20 @@ public class Main {
     public static void main(String[] args) {
         ArquivoTexto arquivo = new ArquivoTexto();
         int nLinha = 0;
-        int nPagina = 0;
+        int nPagina = 1;
+        int qtdPalavras = 0;
+        int qtdStopwords = 0;
+        double porcentagemStopwords;
 
         ListaOrdenadaDePalavras listaOrdenadaDePalavras = new ListaOrdenadaDePalavras();
         String l;
-        arquivo.open("./cocoaandchocolate.txt");
+        Scanner in = new Scanner(System.in);
+        System.out.println("POR FAVOR, DIGITE O NOME DO ARQUIVO A SER ACESSADO:");
+        String acessaString = in.nextLine();
+
+        System.out.println("PROCESSANDO...");
+
+        arquivo.open(acessaString);
 
         do  // laco que passa em cada linha do arquivo
         {
@@ -26,9 +39,7 @@ public class Main {
             {
                 nLinha = 0;
                 nPagina++;
-                //System.out.println("Pagina " + nPagina + ":");
             }
-            System.out.println("Linha " + nLinha + ":");
 
             linha.setLine(l); // define o texto da linha
             do // laco que passa em cada palavra de uma linha
@@ -36,17 +47,24 @@ public class Main {
                 String palavra = (linha.getNextWord()); // obtem a proxima palavra da linha
                 if (palavra != null) {
                     palavra = palavra.toLowerCase();
-                    if (!isStopWord(palavra)) {
+                    boolean stopWord = isStopWord(palavra);
+                    if ((!(stopWord)) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
                         if (listaOrdenadaDePalavras.contains(palavra)) {
                             if (!listaOrdenadaDePalavras.getOcorrencia(palavra, nPagina)) {
                                 listaOrdenadaDePalavras.addPagina(palavra, nPagina);
                             }
-
                         } else {
                             listaOrdenadaDePalavras.addPalavra(palavra);
                             listaOrdenadaDePalavras.addPagina(palavra, nPagina);
                         }
-                        System.out.println("-" + palavra + "-");
+                        listaOrdenadaDePalavras.incrOcorrencias(palavra);
+                        qtdPalavras++;
+                    }
+                    else{
+                        if(stopWord){
+                            qtdStopwords++;
+                            qtdPalavras++;
+                        }
                     }
                 } else {
                     break; //acabou a linha
@@ -56,8 +74,53 @@ public class Main {
         } while (true);
 
             arquivo.close();
+            porcentagemStopwords = ((double)qtdStopwords /qtdPalavras) * 100;
 
-            System.out.println(listaOrdenadaDePalavras);
+        boolean encerrarPrograma = false;
+        int opcao;
+        do{
+            abrirOpcoes();
+            opcao = in.nextInt();
+            switch(opcao){
+                case 1: 
+                    System.out.println(listaOrdenadaDePalavras);
+                    break;
+                case 2:
+                    System.out.printf("%.2f%%\n",porcentagemStopwords);
+                    break;
+                case 3: 
+                    String maisOcorrencias;
+                    maisOcorrencias = listaOrdenadaDePalavras.maisOcorre();
+                    System.out.println(maisOcorrencias);
+                    break;            
+                case 4:  
+                    System.out.println("DIGITE A PALAVRA PARA VER QUAIS PAGINAS ELA ESTA:");
+                    String pala;
+                    in.nextLine();// limpando o buffer
+                    pala = in.nextLine();
+                    ListaDeOcorrencias lista = listaOrdenadaDePalavras.encontrarPalavra(pala);
+                    if(lista!=null){
+                        System.out.println("LISTA DAS PAGINAS:");
+                        System.out.println(listaOrdenadaDePalavras.encontrarPalavra(pala));
+                    }
+                    else{
+                        System.out.println("PALAVRA NAO ENCONTRADA NO TEXTO.");
+                    }    
+                    break;
+                case 5:
+                    encerrarPrograma = true;
+                    System.out.println("...TROCANDO ARQUIVO...");
+                    main(args);
+                    break;
+                case 6:
+                    encerrarPrograma = true;
+                    System.out.println("...ENCERRANDO O PROGRAMA...");
+                    break;
+                default:
+                    System.out.println("OPCAO INVALIDA");
+            }
+        }while(!encerrarPrograma);
+        in.close();
     }
 
 
@@ -79,4 +142,18 @@ public class Main {
     }
 
 
+    public static void abrirOpcoes(){
+        System.out.println("\t=====MENU=====");
+        System.out.println("1 - EXIBIR INDICE REMISSIVO");
+        System.out.println("2 - EXIBIR PERCENTUAL DE STOPWORDS");
+        System.out.println("3 - EXIBIR PALAVRA MAIS FREQUENTE");
+        System.out.println("4 - PROCURAR UMA PALAVRA");
+        System.out.println("5 - TROCAR ARQUIVO DE ANÁLISE");
+        System.out.println("6 - ENCERRAR O PROGRAMA");
+    }
+
+    
 }
+    
+
+
