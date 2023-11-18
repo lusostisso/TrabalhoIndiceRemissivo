@@ -1,5 +1,4 @@
 package src;
-import java.util.List;
 
 /**
  * Esta classe guarda as palavra do indice remissivo em ordem alfabetica.
@@ -12,16 +11,14 @@ public class ListaOrdenadaDePalavras {
         public String s;
         public ListaDeOcorrencias listaOcorrencias;
         public Palavra next; 
-        public int ocorrencias = 0;   
+        public int ocorrencias;
         public Palavra(String str) {
             s = str;
             next = null;
             listaOcorrencias = new ListaDeOcorrencias();
+            ocorrencias = 0;
         }
         // Metodos
-        public void incrOcorrencias(Palavra str){
-            str.ocorrencias++;
-        }
 
         @Override
         public String toString() {
@@ -42,6 +39,11 @@ public class ListaOrdenadaDePalavras {
         this.primeira = null;
         this.ultima = null;
         this.count = 0;
+    }
+
+    public void incrOcorrencias(String str){
+        Palavra aux = getPalavra(str);
+        aux.ocorrencias++;
     }
 
     public void addPalavra(String palavra) {
@@ -77,27 +79,56 @@ public class ListaOrdenadaDePalavras {
         count++;
     }
 
-    public Palavra getPalavra (String palavra) {
+    public Palavra getPalavra(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
         Palavra aux = primeira;
-        for (int i=0; i<count; i++){
-            if (palavra.equals(aux.s)){
-                return aux;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
             }
-            aux = aux.next;
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return aux;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+                aux = primeira; // Reinicia o aux para a primeira palavra
+            } else {
+                esquerda = mid + 1;
+                aux = primeira; // Reinicia o aux para a primeira palavra
+            }
         }
+
         return null;
     }
 
-    public boolean contains (String palavra){
-        Palavra aux = primeira;
-        for (int i=0; i<count; i++){
-            if (palavra.equals(aux.s)){
-                return true;
+
+    public boolean contains(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            Palavra aux = primeira;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
             }
-            aux = aux.next;
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return true;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+            } else {
+                esquerda = mid + 1;
+            }
         }
         return false;
     }
+
 
     public void addPagina (String palavra, int pg){
         Palavra aux = getPalavra(palavra);
@@ -119,7 +150,7 @@ public class ListaOrdenadaDePalavras {
         while (aux != null) {
             s.append("palavra = ");
             s.append(aux.s);
-            s.append(", ocorrencias = ");
+            s.append(", num pag = ");
             s.append(aux.listaOcorrencias);
             s.append("\n");
             aux = aux.next;
@@ -129,18 +160,43 @@ public class ListaOrdenadaDePalavras {
     }
 
     public String maisOcorre(){
-        Palavra maisOcorre,aux2;
+        Palavra maisOcorre, aux2;
         maisOcorre = this.primeira;
         aux2 = this.primeira.next;
         for(int i=0;i<this.count-1;i++){
             if(aux2.ocorrencias > maisOcorre.ocorrencias){
-                maisOcorre=aux2;
+                maisOcorre = aux2;
             }
-            aux2=aux2.next;
+            aux2 = aux2.next;
         }
         return maisOcorre.s;
     }
-    
+
+
+    public ListaDeOcorrencias encontrarPalavra(String palavra) {
+        int esquerda = 0;
+        int direita = this.count - 1;
+
+        while (esquerda <= direita) {
+            int mid = esquerda + (direita - esquerda) / 2;
+            Palavra aux = primeira;
+            for (int i = 0; i < mid; i++) {
+                aux = aux.next;
+            }
+            int resulCompareTo = palavra.compareTo(aux.s);
+
+            if (resulCompareTo == 0) {
+                return aux.listaOcorrencias;
+            } else if (resulCompareTo < 0) {
+                direita = mid - 1;
+            } else {
+                esquerda = mid + 1;
+            }
+        }
+        return null;
+
+    }
+/*
     public ListaDeOcorrencias encontrarPalavra(String pala){
         Palavra aux;
         aux = this.primeira;
@@ -158,5 +214,5 @@ public class ListaOrdenadaDePalavras {
             return paginas;
         }
         return null;
-    }
+    }*/
 }

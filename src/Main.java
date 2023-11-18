@@ -1,11 +1,12 @@
 package src;
 import java.util.Scanner;
 
-import javax.print.DocFlavor.STRING;
-
 /**
  * Classe que inicializa a execução da aplicacao.
- * @author Isabel H. Manssour
+ * @author Luana R. Sostisso
+ * @author Pedro T. Barcelos
+ * @coauthor Isabel H. Manssour
+ *
  */
 public class Main {
 
@@ -16,7 +17,7 @@ public class Main {
         int nPagina = 1;
         int qtdPalavras = 0;
         int qtdStopwords = 0;
-        double porcentagemStopwords = 0;
+        double porcentagemStopwords;
 
         ListaOrdenadaDePalavras listaOrdenadaDePalavras = new ListaOrdenadaDePalavras();
         String l;
@@ -46,8 +47,8 @@ public class Main {
                 String palavra = (linha.getNextWord()); // obtem a proxima palavra da linha
                 if (palavra != null) {
                     palavra = palavra.toLowerCase();
-                    palavra = removerPontuacao(palavra);
-                    if ((!(isStopWord(palavra))) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
+                    boolean stopWord = isStopWord(palavra);
+                    if ((!(stopWord)) && palavra.length()>3) { // arquivo exemplo fala que as palavras devem ter mais de 3
                         if (listaOrdenadaDePalavras.contains(palavra)) {
                             if (!listaOrdenadaDePalavras.getOcorrencia(palavra, nPagina)) {
                                 listaOrdenadaDePalavras.addPagina(palavra, nPagina);
@@ -56,10 +57,11 @@ public class Main {
                             listaOrdenadaDePalavras.addPalavra(palavra);
                             listaOrdenadaDePalavras.addPagina(palavra, nPagina);
                         }
+                        listaOrdenadaDePalavras.incrOcorrencias(palavra);
                         qtdPalavras++;
                     }
                     else{
-                        if(isStopWord(palavra)){
+                        if(stopWord){
                             qtdStopwords++;
                             qtdPalavras++;
                         }
@@ -72,12 +74,10 @@ public class Main {
         } while (true);
 
             arquivo.close();
-            porcentagemStopwords = ((double)qtdStopwords / (double)qtdPalavras) * 100;
+            porcentagemStopwords = ((double)qtdStopwords /qtdPalavras) * 100;
 
         boolean encerrarPrograma = false;
         int opcao;
-        /* MENU */
-        // abrirMenu();   
         do{
             abrirOpcoes();
             opcao = in.nextInt();
@@ -99,7 +99,7 @@ public class Main {
                     in.nextLine();// limpando o buffer
                     pala = in.nextLine();
                     ListaDeOcorrencias lista = listaOrdenadaDePalavras.encontrarPalavra(pala);
-                    if(lista.size()!=0){
+                    if(lista!=null){
                         System.out.println("LISTA DAS PAGINAS:");
                         System.out.println(listaOrdenadaDePalavras.encontrarPalavra(pala));
                     }
@@ -107,7 +107,12 @@ public class Main {
                         System.out.println("PALAVRA NAO ENCONTRADA NO TEXTO.");
                     }    
                     break;
-                case 5: 
+                case 5:
+                    encerrarPrograma = true;
+                    System.out.println("...TROCANDO ARQUIVO...");
+                    main(args);
+                    break;
+                case 6:
                     encerrarPrograma = true;
                     System.out.println("...ENCERRANDO O PROGRAMA...");
                     break;
@@ -136,26 +141,6 @@ public class Main {
         return false;
     }
 
-    public static String removerPontuacao(String str){
-        StringBuilder palavra = new StringBuilder();
-        for(int i=0;i<str.length();i++){
-            char aux = str.charAt(i);
-            if(aux!= '.' && aux!= '!' &&
-               aux!= ',' && aux!= '?' &&
-               aux!= '*' && aux!= ')' &&
-               aux!= '(' && aux!= '"' &&
-               aux!= '-' && aux!= '"' &&
-               aux!= '_' && aux!= ':' &&
-               aux!= ';' && aux!= '&'){
-                if((i==0 || i == str.length()-1)&& aux== '\''){
-                }
-                else{
-                    palavra.append(aux);
-                }
-            }
-        }
-        return palavra.toString();
-    }
 
     public static void abrirOpcoes(){
         System.out.println("\t=====MENU=====");
@@ -163,7 +148,8 @@ public class Main {
         System.out.println("2 - EXIBIR PERCENTUAL DE STOPWORDS");
         System.out.println("3 - EXIBIR PALAVRA MAIS FREQUENTE");
         System.out.println("4 - PROCURAR UMA PALAVRA");
-        System.out.println("5 - ENCERRAR O PROGRAMA");
+        System.out.println("5 - TROCAR ARQUIVO DE ANÁLISE");
+        System.out.println("6 - ENCERRAR O PROGRAMA");
     }
 
     
